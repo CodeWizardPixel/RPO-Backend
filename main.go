@@ -7,6 +7,7 @@ import (
 	"database/sql"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/pressly/goose/v3"
 )
 
 func main() {
@@ -25,6 +26,20 @@ func main() {
 		return
 	}
 	fmt.Println("Database connection established!")
+
+	err = goose.SetDialect("sqlite3")
+	if err != nil {
+		fmt.Println("Error setting goose dialect:", err)
+		return
+	}
+
+	err = goose.Up(db, "./data/migrations")
+	if err != nil {
+		fmt.Println("Error running migrations:", err)
+		return
+	}
+
+	fmt.Println("Migrations completed successfully!")
 
 	mux := http.NewServeMux()
 
