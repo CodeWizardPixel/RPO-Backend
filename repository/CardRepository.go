@@ -19,7 +19,7 @@ type Card struct {
 	Balance    float64
 	IsBlocked  int
 	OwnerName  string
-	KeyID      *int // nullable
+	KeyID      *int
 }
 
 func (r *CardRepository) GetAllCards() ([]Card, error) {
