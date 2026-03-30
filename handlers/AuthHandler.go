@@ -2,9 +2,8 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
-	"net/http"
 	"go-back/service"
+	"net/http"
 )
 
 type AuthHandler struct {
@@ -17,7 +16,7 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	// Token   string `json:"token"`
+	Token   string `json:"token"`
 	Message string `json:"message"`
 	UserID  int    `json:"user_id"`
 }
@@ -37,7 +36,7 @@ func (h *AuthHandler) GetToken(w http.ResponseWriter, r *http.Request) {
 	var req LoginRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 
-	fmt.Printf("Received login request: %+v\n", req)
+	// fmt.Printf("Received login request: %+v\n", req)
 
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -55,27 +54,22 @@ func (h *AuthHandler) GetToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(LoginResponse{
-		Message: "Authorization successful",
-		UserID:  user.ID,
-	})
-
-	// token, err := h.authService.GenerateToken(user)
-	// if err != nil {
-	// 	http.Error(w, "Error generating token", http.StatusInternalServerError)
-	// 	return
-	// }
-
-	// response := LoginResponse{
-	// 	Token:   token,
-	// 	Message: "Authorization successful",
-	// 	UserID:  user.ID,
-	// }
-
 	// w.Header().Set("Content-Type", "application/json")
 	// w.WriteHeader(http.StatusOK)
-	// json.NewEncoder(w).Encode(response)
-}
+	// json.NewEncoder(w).Encode(LoginResponse{
+	// 	Message: "Authorization successful",
+	// 	UserID:  user.ID,
+	// })
 
+	token, err := h.authService.GenerateJWT(user)
+
+	response := LoginResponse{
+		Token:   token,
+		Message: "Authorization successful",
+		UserID:  user.ID,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(response)
+}
