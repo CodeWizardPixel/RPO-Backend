@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"go-back/handlers"
+	"go-back/repository"
+	"go-back/service"
 	"net/http"
-	"simple-router/repository"
 
 	"database/sql"
 
@@ -42,28 +44,24 @@ func main() {
 
 	fmt.Println("Migrations completed successfully!")
 
-	terminalRepository := repository.NewTerminalRepository(db)
-	terminals, err := terminalRepository.GetAllTerminals()
-	if err != nil {
-		fmt.Println("Error fetching terminals:", err)
-		return
-	}
-	fmt.Println("Retrieved terminals:", len(terminals))
+	// terminalRepository := repository.NewTerminalRepository(db)
+	// terminals, err := terminalRepository.GetAllTerminals()
+	// if err != nil {
+	// 	fmt.Println("Error fetching terminals:", err)
+	// 	return
+	// }
+	// fmt.Println("Retrieved terminals:", len(terminals))
 
+	UserRepository := repository.NewUserRepository(db)
+	AuthService := service.NewAuthService(UserRepository, "your_secret_key")
+	AuthHandler := handlers.NewAuthHandler(AuthService)
+
+	
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", hello)
-	mux.HandleFunc("/info", info)
+	mux.HandleFunc("/api/v1/", AuthHandler.GetToken)
 
 	fmt.Println("Server on :8080")
 
 	http.ListenAndServe(":8080", mux)
-}
-
-func hello(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello!\n")
-}
-
-func info(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Info page\n")
 }

@@ -1,10 +1,11 @@
-module simple-router
+module go-back
 
 go 1.21
 
 require (
 	github.com/mattn/go-sqlite3 v1.14.37
 	github.com/pressly/goose/v3 v3.18.0
+	golang.org/x/crypto v0.17.0
 )
 
 require (
