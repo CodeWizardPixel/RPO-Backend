@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"simple-router/repository"
 
 	"database/sql"
 
@@ -40,6 +41,14 @@ func main() {
 	}
 
 	fmt.Println("Migrations completed successfully!")
+
+	terminalRepository := repository.NewTerminalRepository(db)
+	terminals, err := terminalRepository.GetAllTerminals()
+	if err != nil {
+		fmt.Println("Error fetching terminals:", err)
+		return
+	}
+	fmt.Println("Retrieved terminals:", len(terminals))
 
 	mux := http.NewServeMux()
 
