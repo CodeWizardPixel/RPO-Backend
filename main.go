@@ -59,7 +59,8 @@ func main() {
 	
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/api/v1/", AuthHandler.GetToken)
+	mux.HandleFunc("/api/v1/auth/login", AuthHandler.GetToken)
+	mux.HandleFunc("/api/v1/auth/validate", AuthHandler.ValidateToken)
 
 	fmt.Println("Server on :8080")
 
