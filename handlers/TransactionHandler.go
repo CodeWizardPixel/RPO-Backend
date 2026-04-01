@@ -11,7 +11,8 @@ type TransactionHandler struct {
 	txService *service.TransactionService
 }
 
-type transactionRequest struct {
+// TransactionRequest is the JSON body for creating a transaction (admin only).
+type TransactionRequest struct {
 	ID         int     `json:"id"`
 	Amount     float64 `json:"amount"`
 	CardID     int     `json:"card_id"`
@@ -22,6 +23,14 @@ func NewTransactionHandler(txService *service.TransactionService) *TransactionHa
 	return &TransactionHandler{txService: txService}
 }
 
+// GetAllTransactions
+// @Summary List transactions
+// @Tags transactions
+// @Produce json
+// @Success 200 {array} repository.Transaction
+// @Failure 405 {string} string "Method not allowed"
+// @Failure 500 {string} string "Internal server error"
+// @Router /transactions/all [get]
 func (h *TransactionHandler) GetAllTransactions(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -39,6 +48,15 @@ func (h *TransactionHandler) GetAllTransactions(w http.ResponseWriter, r *http.R
 	json.NewEncoder(w).Encode(txs)
 }
 
+// GetTransactionByID
+// @Summary Get transaction by ID
+// @Tags transactions
+// @Produce json
+// @Param id query int true "Transaction ID"
+// @Success 200 {object} repository.Transaction
+// @Failure 400 {string} string "Invalid id or not found"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /transactions/get [get]
 func (h *TransactionHandler) GetTransactionByID(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -63,6 +81,21 @@ func (h *TransactionHandler) GetTransactionByID(w http.ResponseWriter, r *http.R
 	json.NewEncoder(w).Encode(tx)
 }
 
+// CreateTransaction
+// @Summary Create transaction
+// @Description Admin only. Records amount for a card at a terminal.
+// @Tags transactions
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param Authorization header string true "Bearer admin JWT"
+// @Param request body TransactionRequest true "amount, card_id, terminal_id"
+// @Success 201 {object} map[string]string
+// @Failure 400 {string} string "Validation error"
+// @Failure 401 {string} string "Missing or invalid token"
+// @Failure 403 {string} string "Not an admin"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /transactions/create [post]
 func (h *TransactionHandler) CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -75,7 +108,7 @@ func (h *TransactionHandler) CreateTransaction(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	var req transactionRequest
+	var req TransactionRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
@@ -92,6 +125,20 @@ func (h *TransactionHandler) CreateTransaction(w http.ResponseWriter, r *http.Re
 	json.NewEncoder(w).Encode(map[string]string{"message": "Transaction created"})
 }
 
+// DeleteTransaction
+// @Summary Delete transaction
+// @Description Admin only.
+// @Tags transactions
+// @Produce json
+// @Security BearerAuth
+// @Param Authorization header string true "Bearer admin JWT"
+// @Param id query int true "Transaction ID"
+// @Success 200 {object} map[string]string
+// @Failure 400 {string} string "Invalid id"
+// @Failure 401 {string} string "Missing or invalid token"
+// @Failure 403 {string} string "Not an admin"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /transactions/delete [delete]
 func (h *TransactionHandler) DeleteTransaction(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

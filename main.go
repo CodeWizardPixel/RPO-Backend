@@ -1,3 +1,13 @@
+// @title Lab2 REST API
+// @version 1.0
+
+// @host localhost:8080
+// @BasePath /api/v1
+// @schemes http
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 package main
 
 import (
@@ -11,6 +21,9 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/pressly/goose/v3"
+	httpSwagger "github.com/swaggo/http-swagger"
+
+	_ "go-back/docs"
 )
 
 func main() {
@@ -76,6 +89,8 @@ func main() {
 	UserHandler := handlers.NewUserHandler(UserService)
 
 	mux := http.NewServeMux()
+
+	mux.Handle("/api/v1/swagger/", httpSwagger.WrapHandler)
 
 	mux.HandleFunc("/api/v1/auth/login", AuthHandler.GetToken)
 	mux.HandleFunc("/api/v1/auth/validate", AuthHandler.ValidateToken)

@@ -24,6 +24,15 @@ func NewTerminalHandler(terminalService *service.TerminalService) *TerminalHandl
 	}
 }
 
+// GetAllTerminals
+// @Summary List terminals
+// @Description Returns all payment terminals.
+// @Tags terminals
+// @Produce json
+// @Success 200 {array} repository.Terminal
+// @Failure 405 {string} string "Method not allowed"
+// @Failure 500 {string} string "Internal server error"
+// @Router /terminals/all [get]
 func (h *TerminalHandler) GetAllTerminals(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -41,6 +50,16 @@ func (h *TerminalHandler) GetAllTerminals(w http.ResponseWriter, r *http.Request
 	json.NewEncoder(w).Encode(terminals)
 }
 
+// GetTerminalByID
+// @Summary Get terminal by ID
+// @Description Returns a single terminal by numeric id.
+// @Tags terminals
+// @Produce json
+// @Param id query int true "Terminal ID"
+// @Success 200 {object} repository.Terminal
+// @Failure 400 {string} string "Invalid id or not found"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /terminals/get [get]
 func (h *TerminalHandler) GetTerminalByID(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -65,6 +84,21 @@ func (h *TerminalHandler) GetTerminalByID(w http.ResponseWriter, r *http.Request
 	json.NewEncoder(w).Encode(terminal)
 }
 
+// CreateTerminal
+// @Summary Create terminal
+// @Description Creates a terminal. Admin JWT required (is_admin=1).
+// @Tags terminals
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param Authorization header string true "Bearer admin JWT"
+// @Param request body TerminalRequest true "Terminal fields"
+// @Success 201 {object} map[string]string
+// @Failure 400 {string} string "Validation error"
+// @Failure 401 {string} string "Missing or invalid token"
+// @Failure 403 {string} string "Not an admin"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /terminals/create [post]
 func (h *TerminalHandler) CreateTerminal(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -94,6 +128,21 @@ func (h *TerminalHandler) CreateTerminal(w http.ResponseWriter, r *http.Request)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Terminal created"})
 }
 
+// UpdateTerminal
+// @Summary Update terminal
+// @Description Updates a terminal by id. Admin JWT required.
+// @Tags terminals
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param Authorization header string true "Bearer admin JWT"
+// @Param request body TerminalRequest true "Must include id and fields"
+// @Success 200 {object} map[string]string
+// @Failure 400 {string} string "Validation error"
+// @Failure 401 {string} string "Missing or invalid token"
+// @Failure 403 {string} string "Not an admin"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /terminals/update [put]
 func (h *TerminalHandler) UpdateTerminal(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -123,6 +172,20 @@ func (h *TerminalHandler) UpdateTerminal(w http.ResponseWriter, r *http.Request)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Terminal updated"})
 }
 
+// DeleteTerminal
+// @Summary Delete terminal
+// @Description Deletes a terminal by id. Admin JWT required.
+// @Tags terminals
+// @Produce json
+// @Security BearerAuth
+// @Param Authorization header string true "Bearer admin JWT"
+// @Param id query int true "Terminal ID"
+// @Success 200 {object} map[string]string
+// @Failure 400 {string} string "Invalid id"
+// @Failure 401 {string} string "Missing or invalid token"
+// @Failure 403 {string} string "Not an admin"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /terminals/delete [delete]
 func (h *TerminalHandler) DeleteTerminal(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

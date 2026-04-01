@@ -37,6 +37,18 @@ func NewAuthHandler(authService *service.AuthService) *AuthHandler {
 	}
 }
 
+// GetToken
+// @Summary Issue JWT
+// @Description Authenticates a user with login and password and returns a JWT access token.
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body LoginRequest true "Credentials"
+// @Success 200 {object} LoginResponse "JWT and user id"
+// @Failure 400 {string} string "Invalid request body or missing fields"
+// @Failure 401 {string} string "Invalid login or password"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /auth/login [post]
 func (h *AuthHandler) GetToken(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -84,6 +96,17 @@ func (h *AuthHandler) GetToken(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+// ValidateToken
+// @Summary Validate JWT
+// @Description Verifies the Bearer token sent in the Authorization header.
+// @Tags auth
+// @Produce json
+// @Param Authorization header string true "Bearer JWT" default(Bearer )
+// @Success 200 {object} ValidateTokenResponse "Token is valid"
+// @Failure 400 {string} string "Missing or malformed Authorization header"
+// @Failure 401 {object} ValidateTokenResponse "Invalid or expired token"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /auth/validate [post]
 func (h *AuthHandler) ValidateToken(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

@@ -11,19 +11,28 @@ type CardHandler struct {
 	cardService *service.CardService
 }
 
-type cardRequest struct {
-	ID          int     `json:"id"`
-	CardNumber  string  `json:"card_number"`
-	Balance     float64 `json:"balance"`
-	IsBlocked   int     `json:"is_blocked"`
-	OwnerName   string  `json:"owner_name"`
-	KeyID       *int    `json:"key_id"`
+// CardRequest is the JSON body for card operations (admin only for mutations).
+type CardRequest struct {
+	ID         int     `json:"id"`
+	CardNumber string  `json:"card_number"`
+	Balance    float64 `json:"balance"`
+	IsBlocked  int     `json:"is_blocked"`
+	OwnerName  string  `json:"owner_name"`
+	KeyID      *int    `json:"key_id"`
 }
 
 func NewCardHandler(cardService *service.CardService) *CardHandler {
 	return &CardHandler{cardService: cardService}
 }
 
+// GetAllCards
+// @Summary List cards
+// @Tags cards
+// @Produce json
+// @Success 200 {array} repository.Card
+// @Failure 405 {string} string "Method not allowed"
+// @Failure 500 {string} string "Internal server error"
+// @Router /cards/all [get]
 func (h *CardHandler) GetAllCards(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -41,6 +50,15 @@ func (h *CardHandler) GetAllCards(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(cards)
 }
 
+// GetCardByID
+// @Summary Get card by ID
+// @Tags cards
+// @Produce json
+// @Param id query int true "Card ID"
+// @Success 200 {object} repository.Card
+// @Failure 400 {string} string "Invalid id or not found"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /cards/get [get]
 func (h *CardHandler) GetCardByID(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -65,6 +83,21 @@ func (h *CardHandler) GetCardByID(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(card)
 }
 
+// CreateCard
+// @Summary Create card
+// @Description Admin only.
+// @Tags cards
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param Authorization header string true "Bearer admin JWT"
+// @Param request body CardRequest true "card_number, balance, is_blocked, owner_name, optional key_id"
+// @Success 201 {object} map[string]string
+// @Failure 400 {string} string "Validation error"
+// @Failure 401 {string} string "Missing or invalid token"
+// @Failure 403 {string} string "Not an admin"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /cards/create [post]
 func (h *CardHandler) CreateCard(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -77,7 +110,7 @@ func (h *CardHandler) CreateCard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var req cardRequest
+	var req CardRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
@@ -94,6 +127,21 @@ func (h *CardHandler) CreateCard(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "Card created"})
 }
 
+// UpdateCard
+// @Summary Update card
+// @Description Admin only. Updates balance, block flag, owner, and key link.
+// @Tags cards
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param Authorization header string true "Bearer admin JWT"
+// @Param request body CardRequest true "id and fields to update"
+// @Success 200 {object} map[string]string
+// @Failure 400 {string} string "Validation error"
+// @Failure 401 {string} string "Missing or invalid token"
+// @Failure 403 {string} string "Not an admin"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /cards/update [put]
 func (h *CardHandler) UpdateCard(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -106,7 +154,7 @@ func (h *CardHandler) UpdateCard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var req cardRequest
+	var req CardRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
@@ -123,6 +171,21 @@ func (h *CardHandler) UpdateCard(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "Card updated"})
 }
 
+// UpdateCardBalance
+// @Summary Update card balance only
+// @Description Admin only. Sets balance to the given value.
+// @Tags cards
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param Authorization header string true "Bearer admin JWT"
+// @Param request body CardRequest true "id and balance"
+// @Success 200 {object} map[string]string
+// @Failure 400 {string} string "Validation error"
+// @Failure 401 {string} string "Missing or invalid token"
+// @Failure 403 {string} string "Not an admin"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /cards/balance [put]
 func (h *CardHandler) UpdateCardBalance(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -135,7 +198,7 @@ func (h *CardHandler) UpdateCardBalance(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	var req cardRequest
+	var req CardRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
@@ -152,6 +215,20 @@ func (h *CardHandler) UpdateCardBalance(w http.ResponseWriter, r *http.Request) 
 	json.NewEncoder(w).Encode(map[string]string{"message": "Card balance updated"})
 }
 
+// DeleteCard
+// @Summary Delete card
+// @Description Admin only.
+// @Tags cards
+// @Produce json
+// @Security BearerAuth
+// @Param Authorization header string true "Bearer admin JWT"
+// @Param id query int true "Card ID"
+// @Success 200 {object} map[string]string
+// @Failure 400 {string} string "Invalid id"
+// @Failure 401 {string} string "Missing or invalid token"
+// @Failure 403 {string} string "Not an admin"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /cards/delete [delete]
 func (h *CardHandler) DeleteCard(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
