@@ -7,30 +7,29 @@ import (
 	"strconv"
 )
 
-type TerminalHandler struct {
-	terminalService *service.TerminalService
+type UserHandler struct {
+	userService *service.UserService
 }
 
-type TerminalRequest struct {
+type userRequest struct {
 	ID           int    `json:"id"`
-	SerialNumber string `json:"serial_number"`
-	Address      string `json:"address"`
+	Login        string `json:"login"`
 	Name         string `json:"name"`
+	PasswordHash string `json:"password_hash"`
+	IsAdmin      int    `json:"is_admin"`
 }
 
-func NewTerminalHandler(terminalService *service.TerminalService) *TerminalHandler {
-	return &TerminalHandler{
-		terminalService: terminalService,
-	}
+func NewUserHandler(userService *service.UserService) *UserHandler {
+	return &UserHandler{userService: userService}
 }
 
-func (h *TerminalHandler) GetAllTerminals(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	terminals, err := h.terminalService.GetAllTerminals()
+	users, err := h.userService.GetAllUsers()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -38,10 +37,10 @@ func (h *TerminalHandler) GetAllTerminals(w http.ResponseWriter, r *http.Request
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(terminals)
+	json.NewEncoder(w).Encode(users)
 }
 
-func (h *TerminalHandler) GetTerminalByID(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -50,11 +49,11 @@ func (h *TerminalHandler) GetTerminalByID(w http.ResponseWriter, r *http.Request
 	idRaw := r.URL.Query().Get("id")
 	id, err := strconv.Atoi(idRaw)
 	if err != nil {
-		http.Error(w, "Invalid terminal ID", http.StatusBadRequest)
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
 
-	terminal, err := h.terminalService.GetTerminalByID(id)
+	user, err := h.userService.GetUserByID(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -62,10 +61,10 @@ func (h *TerminalHandler) GetTerminalByID(w http.ResponseWriter, r *http.Request
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(terminal)
+	json.NewEncoder(w).Encode(user)
 }
 
-func (h *TerminalHandler) CreateTerminal(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -77,13 +76,13 @@ func (h *TerminalHandler) CreateTerminal(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	var req TerminalRequest
+	var req userRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	err = h.terminalService.CreateTerminal(tokenString, req.SerialNumber, req.Address, req.Name)
+	err = h.userService.CreateUser(tokenString, req.Login, req.Name, req.PasswordHash, req.IsAdmin)
 	if err != nil {
 		writeServiceError(w, err)
 		return
@@ -91,10 +90,10 @@ func (h *TerminalHandler) CreateTerminal(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Terminal created"})
+	json.NewEncoder(w).Encode(map[string]string{"message": "User created"})
 }
 
-func (h *TerminalHandler) UpdateTerminal(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -106,13 +105,13 @@ func (h *TerminalHandler) UpdateTerminal(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	var req TerminalRequest
+	var req userRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	err = h.terminalService.UpdateTerminal(tokenString, req.ID, req.SerialNumber, req.Address, req.Name)
+	err = h.userService.UpdateUser(tokenString, req.ID, req.Name, req.PasswordHash, req.IsAdmin)
 	if err != nil {
 		writeServiceError(w, err)
 		return
@@ -120,10 +119,10 @@ func (h *TerminalHandler) UpdateTerminal(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Terminal updated"})
+	json.NewEncoder(w).Encode(map[string]string{"message": "User updated"})
 }
 
-func (h *TerminalHandler) DeleteTerminal(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -138,11 +137,11 @@ func (h *TerminalHandler) DeleteTerminal(w http.ResponseWriter, r *http.Request)
 	idRaw := r.URL.Query().Get("id")
 	id, err := strconv.Atoi(idRaw)
 	if err != nil {
-		http.Error(w, "Invalid terminal ID", http.StatusBadRequest)
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
 
-	err = h.terminalService.DeleteTerminal(tokenString, id)
+	err = h.userService.DeleteUser(tokenString, id)
 	if err != nil {
 		writeServiceError(w, err)
 		return
@@ -150,5 +149,5 @@ func (h *TerminalHandler) DeleteTerminal(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Terminal deleted"})
+	json.NewEncoder(w).Encode(map[string]string{"message": "User deleted"})
 }

@@ -7,30 +7,26 @@ import (
 	"strconv"
 )
 
-type TerminalHandler struct {
-	terminalService *service.TerminalService
+type KeyHandler struct {
+	keyService *service.KeyService
 }
 
-type TerminalRequest struct {
-	ID           int    `json:"id"`
-	SerialNumber string `json:"serial_number"`
-	Address      string `json:"address"`
-	Name         string `json:"name"`
+type keyRequest struct {
+	ID    int    `json:"id"`
+	Value string `json:"value"`
 }
 
-func NewTerminalHandler(terminalService *service.TerminalService) *TerminalHandler {
-	return &TerminalHandler{
-		terminalService: terminalService,
-	}
+func NewKeyHandler(keyService *service.KeyService) *KeyHandler {
+	return &KeyHandler{keyService: keyService}
 }
 
-func (h *TerminalHandler) GetAllTerminals(w http.ResponseWriter, r *http.Request) {
+func (h *KeyHandler) GetAllKeys(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	terminals, err := h.terminalService.GetAllTerminals()
+	keys, err := h.keyService.GetAllKeys()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -38,10 +34,10 @@ func (h *TerminalHandler) GetAllTerminals(w http.ResponseWriter, r *http.Request
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(terminals)
+	json.NewEncoder(w).Encode(keys)
 }
 
-func (h *TerminalHandler) GetTerminalByID(w http.ResponseWriter, r *http.Request) {
+func (h *KeyHandler) GetKeyByID(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -50,11 +46,11 @@ func (h *TerminalHandler) GetTerminalByID(w http.ResponseWriter, r *http.Request
 	idRaw := r.URL.Query().Get("id")
 	id, err := strconv.Atoi(idRaw)
 	if err != nil {
-		http.Error(w, "Invalid terminal ID", http.StatusBadRequest)
+		http.Error(w, "Invalid key ID", http.StatusBadRequest)
 		return
 	}
 
-	terminal, err := h.terminalService.GetTerminalByID(id)
+	key, err := h.keyService.GetKeyByID(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -62,10 +58,10 @@ func (h *TerminalHandler) GetTerminalByID(w http.ResponseWriter, r *http.Request
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(terminal)
+	json.NewEncoder(w).Encode(key)
 }
 
-func (h *TerminalHandler) CreateTerminal(w http.ResponseWriter, r *http.Request) {
+func (h *KeyHandler) CreateKey(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -77,13 +73,13 @@ func (h *TerminalHandler) CreateTerminal(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	var req TerminalRequest
+	var req keyRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	err = h.terminalService.CreateTerminal(tokenString, req.SerialNumber, req.Address, req.Name)
+	err = h.keyService.CreateKey(tokenString, req.Value)
 	if err != nil {
 		writeServiceError(w, err)
 		return
@@ -91,10 +87,10 @@ func (h *TerminalHandler) CreateTerminal(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Terminal created"})
+	json.NewEncoder(w).Encode(map[string]string{"message": "Key created"})
 }
 
-func (h *TerminalHandler) UpdateTerminal(w http.ResponseWriter, r *http.Request) {
+func (h *KeyHandler) UpdateKey(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -106,13 +102,13 @@ func (h *TerminalHandler) UpdateTerminal(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	var req TerminalRequest
+	var req keyRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	err = h.terminalService.UpdateTerminal(tokenString, req.ID, req.SerialNumber, req.Address, req.Name)
+	err = h.keyService.UpdateKey(tokenString, req.ID, req.Value)
 	if err != nil {
 		writeServiceError(w, err)
 		return
@@ -120,10 +116,10 @@ func (h *TerminalHandler) UpdateTerminal(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Terminal updated"})
+	json.NewEncoder(w).Encode(map[string]string{"message": "Key updated"})
 }
 
-func (h *TerminalHandler) DeleteTerminal(w http.ResponseWriter, r *http.Request) {
+func (h *KeyHandler) DeleteKey(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodDelete {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -138,11 +134,11 @@ func (h *TerminalHandler) DeleteTerminal(w http.ResponseWriter, r *http.Request)
 	idRaw := r.URL.Query().Get("id")
 	id, err := strconv.Atoi(idRaw)
 	if err != nil {
-		http.Error(w, "Invalid terminal ID", http.StatusBadRequest)
+		http.Error(w, "Invalid key ID", http.StatusBadRequest)
 		return
 	}
 
-	err = h.terminalService.DeleteTerminal(tokenString, id)
+	err = h.keyService.DeleteKey(tokenString, id)
 	if err != nil {
 		writeServiceError(w, err)
 		return
@@ -150,5 +146,5 @@ func (h *TerminalHandler) DeleteTerminal(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"message": "Terminal deleted"})
+	json.NewEncoder(w).Encode(map[string]string{"message": "Key deleted"})
 }

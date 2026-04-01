@@ -60,7 +60,21 @@ func main() {
 	TerminalService := service.NewTerminalService(TerminalRepository, AuthService)
 	TerminalHandler := handlers.NewTerminalHandler(TerminalService)
 
-	
+	KeyRepository := repository.NewKeyRepository(db)
+	KeyService := service.NewKeyService(KeyRepository, AuthService)
+	KeyHandler := handlers.NewKeyHandler(KeyService)
+
+	CardRepository := repository.NewCardRepository(db)
+	CardService := service.NewCardService(CardRepository, AuthService)
+	CardHandler := handlers.NewCardHandler(CardService)
+
+	TransactionRepository := repository.NewTransactionRepository(db)
+	TransactionService := service.NewTransactionService(TransactionRepository, AuthService)
+	TransactionHandler := handlers.NewTransactionHandler(TransactionService)
+
+	UserService := service.NewUserService(UserRepository, AuthService)
+	UserHandler := handlers.NewUserHandler(UserService)
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/api/v1/auth/login", AuthHandler.GetToken)
@@ -71,6 +85,30 @@ func main() {
 	mux.HandleFunc("/api/v1/terminals/create", TerminalHandler.CreateTerminal)
 	mux.HandleFunc("/api/v1/terminals/update", TerminalHandler.UpdateTerminal)
 	mux.HandleFunc("/api/v1/terminals/delete", TerminalHandler.DeleteTerminal)
+
+	mux.HandleFunc("/api/v1/users/all", UserHandler.GetAllUsers)
+	mux.HandleFunc("/api/v1/users/get", UserHandler.GetUserByID)
+	mux.HandleFunc("/api/v1/users/create", UserHandler.CreateUser)
+	mux.HandleFunc("/api/v1/users/update", UserHandler.UpdateUser)
+	mux.HandleFunc("/api/v1/users/delete", UserHandler.DeleteUser)
+
+	mux.HandleFunc("/api/v1/keys/all", KeyHandler.GetAllKeys)
+	mux.HandleFunc("/api/v1/keys/get", KeyHandler.GetKeyByID)
+	mux.HandleFunc("/api/v1/keys/create", KeyHandler.CreateKey)
+	mux.HandleFunc("/api/v1/keys/update", KeyHandler.UpdateKey)
+	mux.HandleFunc("/api/v1/keys/delete", KeyHandler.DeleteKey)
+
+	mux.HandleFunc("/api/v1/cards/all", CardHandler.GetAllCards)
+	mux.HandleFunc("/api/v1/cards/get", CardHandler.GetCardByID)
+	mux.HandleFunc("/api/v1/cards/create", CardHandler.CreateCard)
+	mux.HandleFunc("/api/v1/cards/update", CardHandler.UpdateCard)
+	mux.HandleFunc("/api/v1/cards/balance", CardHandler.UpdateCardBalance)
+	mux.HandleFunc("/api/v1/cards/delete", CardHandler.DeleteCard)
+
+	mux.HandleFunc("/api/v1/transactions/all", TransactionHandler.GetAllTransactions)
+	mux.HandleFunc("/api/v1/transactions/get", TransactionHandler.GetTransactionByID)
+	mux.HandleFunc("/api/v1/transactions/create", TransactionHandler.CreateTransaction)
+	mux.HandleFunc("/api/v1/transactions/delete", TransactionHandler.DeleteTransaction)
 
 	fmt.Println("Server on :8080")
 

@@ -24,3 +24,15 @@ func extractBearerToken(r *http.Request) (string, error) {
 
 	return tokenString, nil
 }
+
+func writeServiceError(w http.ResponseWriter, err error) {
+	errText := err.Error()
+	switch {
+	case strings.Contains(errText, "forbidden"):
+		http.Error(w, errText, http.StatusForbidden)
+	case strings.Contains(errText, "token"):
+		http.Error(w, errText, http.StatusUnauthorized)
+	default:
+		http.Error(w, errText, http.StatusBadRequest)
+	}
+}
