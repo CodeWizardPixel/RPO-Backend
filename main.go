@@ -82,7 +82,7 @@ func main() {
 	CardHandler := handlers.NewCardHandler(CardService)
 
 	TransactionRepository := repository.NewTransactionRepository(db)
-	TransactionService := service.NewTransactionService(TransactionRepository, AuthService)
+	TransactionService := service.NewTransactionService(TransactionRepository, CardRepository, AuthService)
 	TransactionHandler := handlers.NewTransactionHandler(TransactionService)
 
 	UserService := service.NewUserService(UserRepository, AuthService)
@@ -124,6 +124,7 @@ func main() {
 	mux.HandleFunc("/api/v1/transactions/get", TransactionHandler.GetTransactionByID)
 	mux.HandleFunc("/api/v1/transactions/create", TransactionHandler.CreateTransaction)
 	mux.HandleFunc("/api/v1/transactions/delete", TransactionHandler.DeleteTransaction)
+	mux.HandleFunc("/api/v1/transactions/authorize", TransactionHandler.AuthorizeTransaction)
 
 	fmt.Println("Server on :8080")
 

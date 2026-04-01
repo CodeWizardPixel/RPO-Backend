@@ -11,12 +11,16 @@ type TransactionHandler struct {
 	txService *service.TransactionService
 }
 
-// TransactionRequest is the JSON body for creating a transaction (admin only).
 type TransactionRequest struct {
 	ID         int     `json:"id"`
 	Amount     float64 `json:"amount"`
 	CardID     int     `json:"card_id"`
 	TerminalID int     `json:"terminal_id"`
+}
+
+type AuthorizationRequest struct {
+	CardNumber string  `json:"card_number"`
+	Amount     float64 `json:"amount"`
 }
 
 func NewTransactionHandler(txService *service.TransactionService) *TransactionHandler {
@@ -167,4 +171,35 @@ func (h *TransactionHandler) DeleteTransaction(w http.ResponseWriter, r *http.Re
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Transaction deleted"})
+}
+
+// AuthorizeTransaction
+// @Summary Authorize payment transaction
+// @Description Terminal requests authorization for payment transaction. Checks card number and amount.
+// @Tags transactions
+// @Accept json
+// @Produce json
+// @Param request body AuthorizationRequest true "card_number, amount"
+// @Success 200 {object} service.AuthorizationResponse
+// @Failure 400 {string} string "Invalid request"
+// @Failure 405 {string} string "Method not allowed"
+// @Router /transactions/authorize [post]
+func (h *TransactionHandler) AuthorizeTransaction(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req AuthorizationRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Authorize the transaction
+	result := h.txService.AuthorizeTransaction(req.CardNumber, req.Amount)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(result)
 }

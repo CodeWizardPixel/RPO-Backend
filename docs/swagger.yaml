@@ -1,5 +1,12 @@
 basePath: /api/v1
 definitions:
+  handlers.AuthorizationRequest:
+    properties:
+      amount:
+        type: number
+      card_number:
+        type: string
+    type: object
   handlers.CardRequest:
     properties:
       balance:
@@ -137,6 +144,17 @@ definitions:
       name:
         type: string
       passwordHash:
+        type: string
+    type: object
+  service.AuthorizationResponse:
+    properties:
+      authorized:
+        type: boolean
+      balance:
+        type: number
+      card_number:
+        type: string
+      message:
         type: string
     type: object
 host: localhost:8080
@@ -839,6 +857,37 @@ paths:
           schema:
             type: string
       summary: List transactions
+      tags:
+      - transactions
+  /transactions/authorize:
+    post:
+      consumes:
+      - application/json
+      description: Terminal requests authorization for payment transaction. Checks
+        card number and amount.
+      parameters:
+      - description: card_number, amount
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.AuthorizationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/service.AuthorizationResponse'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "405":
+          description: Method not allowed
+          schema:
+            type: string
+      summary: Authorize payment transaction
       tags:
       - transactions
   /transactions/create:

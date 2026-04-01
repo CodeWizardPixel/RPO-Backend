@@ -11,7 +11,6 @@ type UserHandler struct {
 	userService *service.UserService
 }
 
-// UserRequest is the JSON body for creating or updating a user (admin only for mutations).
 type UserRequest struct {
 	ID           int    `json:"id"`
 	Login        string `json:"login"`

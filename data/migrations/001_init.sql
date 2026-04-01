@@ -20,7 +20,7 @@ CREATE TABLE users (
     is_admin INTEGER NOT NULL
 );
 
-CREATE TABLE transport_cards (
+CREATE TABLE cards (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     card_number TEXT NOT NULL UNIQUE,
     balance REAL NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE transactions (
 -- +goose Down
 
 DROP TABLE IF EXISTS transactions;
-DROP TABLE IF EXISTS transport_cards;
+DROP TABLE IF EXISTS cards;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS terminals;
 DROP TABLE IF EXISTS keys;

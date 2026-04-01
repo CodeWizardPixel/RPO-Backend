@@ -23,7 +23,7 @@ type Card struct {
 }
 
 func (r *CardRepository) GetAllCards() ([]Card, error) {
-	rows, err := r.DB.Query("select * from _cards")
+	rows, err := r.DB.Query("select * from cards")
 	if err != nil {
 		return nil, fmt.Errorf("error querying  cards: %w", err)
 	}

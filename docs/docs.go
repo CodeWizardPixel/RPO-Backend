@@ -1089,6 +1089,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/transactions/authorize": {
+            "post": {
+                "description": "Terminal requests authorization for payment transaction. Checks card number and amount.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transactions"
+                ],
+                "summary": "Authorize payment transaction",
+                "parameters": [
+                    {
+                        "description": "card_number, amount",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.AuthorizationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/service.AuthorizationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/transactions/create": {
             "post": {
                 "security": [
@@ -1561,6 +1607,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "handlers.AuthorizationRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "card_number": {
+                    "type": "string"
+                }
+            }
+        },
         "handlers.CardRequest": {
             "type": "object",
             "properties": {
@@ -1772,6 +1829,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "passwordHash": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.AuthorizationResponse": {
+            "type": "object",
+            "properties": {
+                "authorized": {
+                    "type": "boolean"
+                },
+                "balance": {
+                    "type": "number"
+                },
+                "card_number": {
+                    "type": "string"
+                },
+                "message": {
                     "type": "string"
                 }
             }

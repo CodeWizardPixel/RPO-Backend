@@ -11,7 +11,6 @@ type KeyHandler struct {
 	keyService *service.KeyService
 }
 
-// KeyRequest is the JSON body for key create/update (admin only for mutations).
 type KeyRequest struct {
 	ID    int    `json:"id"`
 	Value string `json:"value"`

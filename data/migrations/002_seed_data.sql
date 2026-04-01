@@ -12,7 +12,7 @@ INSERT INTO users (login, name, password_hash, is_admin) VALUES
 ('admin', 'Administrator', '$2a$10$hmcNT5tK9HQVlOAg5FNe2erXIkAHnK1iAYEzDafSbOov9rQ0PtLwO', 1),
 ('user1', 'Test User', '$2a$10$user_hash_here', 0);
 
-INSERT INTO transport_cards (card_number, balance, is_blocked, owner_name, key_id) VALUES
+INSERT INTO cards (card_number, balance, is_blocked, owner_name, key_id) VALUES
 ('CARD001', 500.0, 0, 'Ivan Ivanov', 1),
 ('CARD002', 150.0, 0, 'Petr Petrov', 1),
 ('CARD003', 0.0, 1, 'Blocked User', 2);
@@ -24,7 +24,7 @@ INSERT INTO transactions (amount, card_id, terminal_id) VALUES
 -- +goose Down
 
 DELETE FROM transactions;
-DELETE FROM transport_cards;
+DELETE FROM cards;
 DELETE FROM users;
 DELETE FROM terminals;
 DELETE FROM keys;

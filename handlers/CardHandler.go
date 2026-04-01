@@ -11,7 +11,6 @@ type CardHandler struct {
 	cardService *service.CardService
 }
 
-// CardRequest is the JSON body for card operations (admin only for mutations).
 type CardRequest struct {
 	ID         int     `json:"id"`
 	CardNumber string  `json:"card_number"`
