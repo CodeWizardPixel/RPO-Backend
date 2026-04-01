@@ -10,7 +10,7 @@ INSERT INTO terminals (serial_number, address, name) VALUES
 
 INSERT INTO users (login, name, password_hash, is_admin) VALUES
 ('admin', 'Administrator', '$2a$10$hmcNT5tK9HQVlOAg5FNe2erXIkAHnK1iAYEzDafSbOov9rQ0PtLwO', 1),
-('user1', 'Test User', '$2a$10$user_hash_here', 0);
+('user1', 'Test User', '$2a$10$Bbs9F2P.1lynI0AuUPkuL.da7JofFoGilRk5BgIEknV4./2RyQTsG', 0);
 
 INSERT INTO cards (card_number, balance, is_blocked, owner_name, key_id) VALUES
 ('CARD001', 500.0, 0, 'Ivan Ivanov', 1),
