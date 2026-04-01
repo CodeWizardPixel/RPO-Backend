@@ -53,14 +53,24 @@ func main() {
 	// fmt.Println("Retrieved terminals:", len(terminals))
 
 	UserRepository := repository.NewUserRepository(db)
-	AuthService := service.NewAuthService(UserRepository, "your_secret_key")
+	AuthService := service.NewAuthService(UserRepository, "wruff")
 	AuthHandler := handlers.NewAuthHandler(AuthService)
+
+	TerminalRepository := repository.NewTerminalRepository(db)
+	TerminalService := service.NewTerminalService(TerminalRepository, AuthService)
+	TerminalHandler := handlers.NewTerminalHandler(TerminalService)
 
 	
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/api/v1/auth/login", AuthHandler.GetToken)
 	mux.HandleFunc("/api/v1/auth/validate", AuthHandler.ValidateToken)
+
+	mux.HandleFunc("/api/v1/terminals/all", TerminalHandler.GetAllTerminals)
+	mux.HandleFunc("/api/v1/terminals/get", TerminalHandler.GetTerminalByID)
+	mux.HandleFunc("/api/v1/terminals/create", TerminalHandler.CreateTerminal)
+	mux.HandleFunc("/api/v1/terminals/update", TerminalHandler.UpdateTerminal)
+	mux.HandleFunc("/api/v1/terminals/delete", TerminalHandler.DeleteTerminal)
 
 	fmt.Println("Server on :8080")
 

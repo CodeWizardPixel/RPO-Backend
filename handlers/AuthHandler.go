@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"go-back/service"
 	"net/http"
-	"strings"
 )
 
 type AuthHandler struct {
@@ -91,25 +90,13 @@ func (h *AuthHandler) ValidateToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	authHeader := r.Header.Get("Authorization")
-	if authHeader == "" {
-		http.Error(w, "Authorization header is required", http.StatusBadRequest)
+	tokenString, err := extractBearerToken(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	const bearerScheme = "Bearer "
-	if !strings.HasPrefix(authHeader, bearerScheme) {
-		http.Error(w, "Invalid Authorization header format. Expected: Bearer <token>", http.StatusBadRequest)
-		return
-	}
-
-	tokenString := strings.TrimPrefix(authHeader, bearerScheme)
-	if tokenString == "" {
-		http.Error(w, "Token is required", http.StatusBadRequest)
-		return
-	}
-
-	_, err := h.authService.ValidateJWT(tokenString)
+	_, err = h.authService.ValidateJWT(tokenString)
 	if err != nil {
 		fmt.Printf("Token validation error: %v\n", err)
 		response := ValidateTokenResponse{

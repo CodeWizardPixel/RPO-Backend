@@ -7,11 +7,13 @@ import (
 
 type TerminalService struct {
 	terminalRepo *repository.TerminalRepository
+	authService  *AuthService
 }
 
-func NewTerminalService(terminalRepo *repository.TerminalRepository) *TerminalService {
+func NewTerminalService(terminalRepo *repository.TerminalRepository, authService *AuthService) *TerminalService {
 	return &TerminalService{
 		terminalRepo: terminalRepo,
+		authService:  authService,
 	}
 }
 
@@ -37,7 +39,11 @@ func (s *TerminalService) GetTerminalByID(id int) (*repository.Terminal, error) 
 	return terminal, nil
 }
 
-func (s *TerminalService) CreateTerminal(serialNumber, address, name string) error {
+func (s *TerminalService) CreateTerminal(tokenString, serialNumber, address, name string) error {
+	if err := ensureAdmin(s.authService, tokenString); err != nil {
+		return err
+	}
+
 	if serialNumber == "" {
 		return fmt.Errorf("serial number cannot be empty")
 	}
@@ -56,7 +62,11 @@ func (s *TerminalService) CreateTerminal(serialNumber, address, name string) err
 	return nil
 }
 
-func (s *TerminalService) UpdateTerminal(id int, serialNumber, address, name string) error {
+func (s *TerminalService) UpdateTerminal(tokenString string, id int, serialNumber, address, name string) error {
+	if err := ensureAdmin(s.authService, tokenString); err != nil {
+		return err
+	}
+
 	if id <= 0 {
 		return fmt.Errorf("invalid terminal ID: must be greater than 0")
 	}
@@ -78,7 +88,11 @@ func (s *TerminalService) UpdateTerminal(id int, serialNumber, address, name str
 	return nil
 }
 
-func (s *TerminalService) DeleteTerminal(id int) error {
+func (s *TerminalService) DeleteTerminal(tokenString string, id int) error {
+	if err := ensureAdmin(s.authService, tokenString); err != nil {
+		return err
+	}
+
 	if id <= 0 {
 		return fmt.Errorf("invalid terminal ID: must be greater than 0")
 	}
