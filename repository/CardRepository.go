@@ -43,7 +43,7 @@ func (r *CardRepository) GetAllCards() ([]Card, error) {
 }
 
 func (r *CardRepository) GetCardByID(id int) (*Card, error) {
-	row := r.DB.QueryRow("select * from _cards where id = ?", id)
+	row := r.DB.QueryRow("select * from cards where id = ?", id)
 	var tc Card
 	err := row.Scan(&tc.ID, &tc.CardNumber, &tc.Balance, &tc.IsBlocked, &tc.OwnerName, &tc.KeyID)
 	if err != nil {
@@ -53,7 +53,7 @@ func (r *CardRepository) GetCardByID(id int) (*Card, error) {
 }
 
 func (r *CardRepository) CreateCard(cardNumber string, balance float64, isBlocked int, ownerName string, keyID *int) error {
-	_, err := r.DB.Exec("insert into _cards (card_number, balance, is_blocked, owner_name, key_id) values (?, ?, ?, ?, ?)",
+	_, err := r.DB.Exec("insert into cards (card_number, balance, is_blocked, owner_name, key_id) values (?, ?, ?, ?, ?)",
 		cardNumber, balance, isBlocked, ownerName, keyID)
 	if err != nil {
 		return fmt.Errorf("error creating  card: %w", err)
@@ -62,7 +62,7 @@ func (r *CardRepository) CreateCard(cardNumber string, balance float64, isBlocke
 }
 
 func (r *CardRepository) UpdateCard(id int, balance float64, isBlocked int, ownerName string, keyID *int) error {
-	_, err := r.DB.Exec("update _cards set balance = ?, is_blocked = ?, owner_name = ?, key_id = ? where id = ?",
+	_, err := r.DB.Exec("update cards set balance = ?, is_blocked = ?, owner_name = ?, key_id = ? where id = ?",
 		balance, isBlocked, ownerName, keyID, id)
 	if err != nil {
 		return fmt.Errorf("error updating  card: %w", err)
@@ -71,7 +71,7 @@ func (r *CardRepository) UpdateCard(id int, balance float64, isBlocked int, owne
 }
 
 func (r *CardRepository) UpdateCardBalance(id int, balance float64) error {
-	_, err := r.DB.Exec("update _cards set balance = ? where id = ?", balance, id)
+	_, err := r.DB.Exec("update cards set balance = ? where id = ?", balance, id)
 	if err != nil {
 		return fmt.Errorf("error updating  card balance: %w", err)
 	}
@@ -79,7 +79,7 @@ func (r *CardRepository) UpdateCardBalance(id int, balance float64) error {
 }
 
 func (r *CardRepository) DeleteCardByID(id int) error {
-	_, err := r.DB.Exec("delete from _cards where id = ?", id)
+	_, err := r.DB.Exec("delete from cards where id = ?", id)
 	if err != nil {
 		return fmt.Errorf("error deleting  card: %w", err)
 	}

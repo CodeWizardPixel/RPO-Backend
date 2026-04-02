@@ -89,7 +89,6 @@ func (h *CardHandler) GetCardByID(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param request body CardRequest true "card_number, balance, is_blocked, owner_name, optional key_id"
 // @Success 201 {object} map[string]string
 // @Failure 400 {string} string "Validation error"
@@ -133,7 +132,6 @@ func (h *CardHandler) CreateCard(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param request body CardRequest true "id and fields to update"
 // @Success 200 {object} map[string]string
 // @Failure 400 {string} string "Validation error"
@@ -177,7 +175,6 @@ func (h *CardHandler) UpdateCard(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param request body CardRequest true "id and balance"
 // @Success 200 {object} map[string]string
 // @Failure 400 {string} string "Validation error"
@@ -220,7 +217,6 @@ func (h *CardHandler) UpdateCardBalance(w http.ResponseWriter, r *http.Request) 
 // @Tags cards
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param id query int true "Card ID"
 // @Success 200 {object} map[string]string
 // @Failure 400 {string} string "Invalid id"

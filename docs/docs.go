@@ -170,13 +170,6 @@ const docTemplate = `{
                 "summary": "Update card balance only",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "id and balance",
                         "name": "request",
                         "in": "body",
@@ -243,13 +236,6 @@ const docTemplate = `{
                 "summary": "Create card",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "card_number, balance, is_blocked, owner_name, optional key_id",
                         "name": "request",
                         "in": "body",
@@ -312,13 +298,6 @@ const docTemplate = `{
                 ],
                 "summary": "Delete card",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Card ID",
@@ -424,13 +403,6 @@ const docTemplate = `{
                 "summary": "Update card",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "id and fields to update",
                         "name": "request",
                         "in": "body",
@@ -531,13 +503,6 @@ const docTemplate = `{
                 "summary": "Create key",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "value",
                         "name": "request",
                         "in": "body",
@@ -600,13 +565,6 @@ const docTemplate = `{
                 ],
                 "summary": "Delete key",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Key ID",
@@ -712,13 +670,6 @@ const docTemplate = `{
                 "summary": "Update key",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "id, value",
                         "name": "request",
                         "in": "body",
@@ -820,13 +771,6 @@ const docTemplate = `{
                 "summary": "Create terminal",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "Terminal fields",
                         "name": "request",
                         "in": "body",
@@ -889,13 +833,6 @@ const docTemplate = `{
                 ],
                 "summary": "Delete terminal",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Terminal ID",
@@ -1001,13 +938,6 @@ const docTemplate = `{
                 ],
                 "summary": "Update terminal",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "description": "Must include id and fields",
                         "name": "request",
@@ -1155,13 +1085,6 @@ const docTemplate = `{
                 "summary": "Create transaction",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "amount, card_id, terminal_id",
                         "name": "request",
                         "in": "body",
@@ -1224,13 +1147,6 @@ const docTemplate = `{
                 ],
                 "summary": "Delete transaction",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Transaction ID",
@@ -1371,13 +1287,6 @@ const docTemplate = `{
                 "summary": "Create user",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "login, name, password_hash, is_admin",
                         "name": "request",
                         "in": "body",
@@ -1440,13 +1349,6 @@ const docTemplate = `{
                 ],
                 "summary": "Delete user",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "User ID",
@@ -1551,13 +1453,6 @@ const docTemplate = `{
                 ],
                 "summary": "Update user",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "description": "id, name, password_hash, is_admin",
                         "name": "request",

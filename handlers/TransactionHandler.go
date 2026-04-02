@@ -92,7 +92,6 @@ func (h *TransactionHandler) GetTransactionByID(w http.ResponseWriter, r *http.R
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param request body TransactionRequest true "amount, card_id, terminal_id"
 // @Success 201 {object} map[string]string
 // @Failure 400 {string} string "Validation error"
@@ -135,7 +134,6 @@ func (h *TransactionHandler) CreateTransaction(w http.ResponseWriter, r *http.Re
 // @Tags transactions
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param id query int true "Transaction ID"
 // @Success 200 {object} map[string]string
 // @Failure 400 {string} string "Invalid id"

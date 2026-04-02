@@ -91,7 +91,6 @@ func (h *TerminalHandler) GetTerminalByID(w http.ResponseWriter, r *http.Request
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param request body TerminalRequest true "Terminal fields"
 // @Success 201 {object} map[string]string
 // @Failure 400 {string} string "Validation error"
@@ -135,7 +134,6 @@ func (h *TerminalHandler) CreateTerminal(w http.ResponseWriter, r *http.Request)
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param request body TerminalRequest true "Must include id and fields"
 // @Success 200 {object} map[string]string
 // @Failure 400 {string} string "Validation error"
@@ -178,7 +176,6 @@ func (h *TerminalHandler) UpdateTerminal(w http.ResponseWriter, r *http.Request)
 // @Tags terminals
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param id query int true "Terminal ID"
 // @Success 200 {object} map[string]string
 // @Failure 400 {string} string "Invalid id"

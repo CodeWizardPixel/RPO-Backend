@@ -165,13 +165,6 @@
                 "summary": "Update card balance only",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "id and balance",
                         "name": "request",
                         "in": "body",
@@ -238,13 +231,6 @@
                 "summary": "Create card",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "card_number, balance, is_blocked, owner_name, optional key_id",
                         "name": "request",
                         "in": "body",
@@ -307,13 +293,6 @@
                 ],
                 "summary": "Delete card",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Card ID",
@@ -419,13 +398,6 @@
                 "summary": "Update card",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "id and fields to update",
                         "name": "request",
                         "in": "body",
@@ -526,13 +498,6 @@
                 "summary": "Create key",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "value",
                         "name": "request",
                         "in": "body",
@@ -595,13 +560,6 @@
                 ],
                 "summary": "Delete key",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Key ID",
@@ -707,13 +665,6 @@
                 "summary": "Update key",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "id, value",
                         "name": "request",
                         "in": "body",
@@ -815,13 +766,6 @@
                 "summary": "Create terminal",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "Terminal fields",
                         "name": "request",
                         "in": "body",
@@ -884,13 +828,6 @@
                 ],
                 "summary": "Delete terminal",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Terminal ID",
@@ -996,13 +933,6 @@
                 ],
                 "summary": "Update terminal",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "description": "Must include id and fields",
                         "name": "request",
@@ -1150,13 +1080,6 @@
                 "summary": "Create transaction",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "amount, card_id, terminal_id",
                         "name": "request",
                         "in": "body",
@@ -1219,13 +1142,6 @@
                 ],
                 "summary": "Delete transaction",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "Transaction ID",
@@ -1366,13 +1282,6 @@
                 "summary": "Create user",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
                         "description": "login, name, password_hash, is_admin",
                         "name": "request",
                         "in": "body",
@@ -1435,13 +1344,6 @@
                 ],
                 "summary": "Delete user",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "User ID",
@@ -1546,13 +1448,6 @@
                 ],
                 "summary": "Update user",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer admin JWT",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "description": "id, name, password_hash, is_admin",
                         "name": "request",

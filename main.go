@@ -29,7 +29,7 @@ import (
 func main() {
 	fmt.Println("Meow! Starting server...")
 
-	db, err := sql.Open("sqlite3", "/data/app.db")
+	db, err := sql.Open("sqlite3", "./data/app.db")
 	if err != nil {
 		fmt.Println("Error opening database:", err)
 		return
@@ -49,7 +49,7 @@ func main() {
 		return
 	}
 
-	err = goose.Up(db, "/data/migrations")
+	err = goose.Up(db, "./data/migrations")
 	if err != nil {
 		fmt.Println("Error running migrations:", err)
 		return

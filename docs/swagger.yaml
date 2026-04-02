@@ -258,11 +258,6 @@ paths:
       - application/json
       description: Admin only. Sets balance to the given value.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: id and balance
         in: body
         name: request
@@ -305,11 +300,6 @@ paths:
       - application/json
       description: Admin only.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: card_number, balance, is_blocked, owner_name, optional key_id
         in: body
         name: request
@@ -350,11 +340,6 @@ paths:
     delete:
       description: Admin only.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: Card ID
         in: query
         name: id
@@ -422,11 +407,6 @@ paths:
       - application/json
       description: Admin only. Updates balance, block flag, owner, and key link.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: id and fields to update
         in: body
         name: request
@@ -491,11 +471,6 @@ paths:
       - application/json
       description: Admin only.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: value
         in: body
         name: request
@@ -536,11 +511,6 @@ paths:
     delete:
       description: Admin only.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: Key ID
         in: query
         name: id
@@ -608,11 +578,6 @@ paths:
       - application/json
       description: Admin only.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: id, value
         in: body
         name: request
@@ -678,11 +643,6 @@ paths:
       - application/json
       description: Creates a terminal. Admin JWT required (is_admin=1).
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: Terminal fields
         in: body
         name: request
@@ -723,11 +683,6 @@ paths:
     delete:
       description: Deletes a terminal by id. Admin JWT required.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: Terminal ID
         in: query
         name: id
@@ -796,11 +751,6 @@ paths:
       - application/json
       description: Updates a terminal by id. Admin JWT required.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: Must include id and fields
         in: body
         name: request
@@ -896,11 +846,6 @@ paths:
       - application/json
       description: Admin only. Records amount for a card at a terminal.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: amount, card_id, terminal_id
         in: body
         name: request
@@ -941,11 +886,6 @@ paths:
     delete:
       description: Admin only.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: Transaction ID
         in: query
         name: id
@@ -1036,11 +976,6 @@ paths:
       - application/json
       description: Admin only. Expects pre-hashed password in password_hash.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: login, name, password_hash, is_admin
         in: body
         name: request
@@ -1081,11 +1016,6 @@ paths:
     delete:
       description: Admin only.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: User ID
         in: query
         name: id
@@ -1153,11 +1083,6 @@ paths:
       - application/json
       description: Admin only.
       parameters:
-      - description: Bearer admin JWT
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: id, name, password_hash, is_admin
         in: body
         name: request

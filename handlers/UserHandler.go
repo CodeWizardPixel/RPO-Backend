@@ -89,7 +89,6 @@ func (h *UserHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param request body UserRequest true "login, name, password_hash, is_admin"
 // @Success 201 {object} map[string]string
 // @Failure 400 {string} string "Validation error"
@@ -133,7 +132,6 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param request body UserRequest true "id, name, password_hash, is_admin"
 // @Success 200 {object} map[string]string
 // @Failure 400 {string} string "Validation error"
@@ -176,7 +174,6 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 // @Tags users
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param id query int true "User ID"
 // @Success 200 {object} map[string]string
 // @Failure 400 {string} string "Invalid id"

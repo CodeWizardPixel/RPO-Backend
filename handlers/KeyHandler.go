@@ -85,7 +85,6 @@ func (h *KeyHandler) GetKeyByID(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param request body KeyRequest true "value"
 // @Success 201 {object} map[string]string
 // @Failure 400 {string} string "Validation error"
@@ -129,7 +128,6 @@ func (h *KeyHandler) CreateKey(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param request body KeyRequest true "id, value"
 // @Success 200 {object} map[string]string
 // @Failure 400 {string} string "Validation error"
@@ -172,7 +170,6 @@ func (h *KeyHandler) UpdateKey(w http.ResponseWriter, r *http.Request) {
 // @Tags keys
 // @Produce json
 // @Security BearerAuth
-// @Param Authorization header string true "Bearer admin JWT"
 // @Param id query int true "Key ID"
 // @Success 200 {object} map[string]string
 // @Failure 400 {string} string "Invalid id"
